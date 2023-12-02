@@ -26,7 +26,7 @@
 
 cmake_minimum_required(VERSION 3.0)
 
-project(minhook LANGUAGES C)
+project(minhook LANGUAGES CXX)
 
 include(CMakePackageConfigHelpers)
 
@@ -39,18 +39,25 @@ set(MINHOOK_VERSION ${MINHOOK_MAJOR_VERSION}.${MINHOOK_MINOR_VERSION}.${MINHOOK_
 #    BUILD     # 
 ################
 
+FetchContent_Declare(
+  xorstr
+  URL https://github.com/X-rays5/xorstr.git
+  GIT_TAG 066c64eea5104f4e3cfbc49e39031400e086425a
+)
+fetchcontent_makeavailable(xorstr)
+
 option(BUILD_SHARED_LIBS "build shared version" OFF)
 
 set(SOURCES_MINHOOK 
-  "src/buffer.c"
-  "src/hook.c"
-  "src/trampoline.c"
+  "src/buffer.cpp"
+  "src/hook.cpp"
+  "src/trampoline.cpp"
 )
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  set(SOURCES_HDE "src/hde/hde64.c")
+  set(SOURCES_HDE "src/hde/hde64.cpp")
 else()
-  set(SOURCES_HDE "src/hde/hde32.c")
+  set(SOURCES_HDE "src/hde/hde32.cpp")
 endif()
 
 if(BUILD_SHARED_LIBS)
@@ -69,6 +76,8 @@ target_include_directories(minhook PUBLIC
 
 target_include_directories(minhook PRIVATE "src/")
 target_include_directories(minhook PRIVATE "src/hde/")
+
+target_include_directories(minhook PRIVATE ${xorstr_SOURCE_DIR}/include)
 
 if(WIN32)
   set_target_properties(minhook PROPERTIES PREFIX "")
