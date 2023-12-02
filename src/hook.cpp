@@ -32,7 +32,7 @@
 #include <climits>
 #include <xorstr.hpp>
 
-#include "../include/MinHook.h"
+#include "../include/MinHook.hpp"
 #include "buffer.hpp"
 #include "trampoline.hpp"
 
